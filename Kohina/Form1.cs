@@ -55,9 +55,13 @@ namespace Kohina {
 			bb.GetPinByName("Mix").Connect(t2l.GetPinByName("Output"));
 			*/
 			
+			BitmapChannelRemap cr = new BitmapChannelRemap();
+			w.AddNode(cr);
+			cr.GetPinByName("Input").Connect(bb.GetPinByName("Output"));
+			
 			BitmapViewer bv = new BitmapViewer();
 			w.AddNode(bv);
-			bv.GetPinByName("Input").Connect(bb.GetPinByName("Output"));
+			bv.GetPinByName("Input").Connect(cr.GetPinByName("Output"));
 			
 			
 			connectionViewPanel1.World = w;
