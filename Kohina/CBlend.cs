@@ -42,7 +42,8 @@ namespace Kohina {
 			public static extern void Noise(IntPtr buf, UInt32 lenBytes, UInt32 aMask, UInt32 oMask);
 			[DllImport("cblend.dll")]
 			public static extern void Clear(IntPtr buf, UInt32 lenBytes, UInt32 color, UInt32 oMask);
-
+			[DllImport("cblend.dll")]
+			public static extern void CRemap(IntPtr buf, UInt32 lenBytes, UInt32 cMask);
 		}
 		
 		public static void Seed(int seed) {
@@ -52,10 +53,15 @@ namespace Kohina {
 		public static void Noise(IntPtr buf, UInt32 lenBytes, UInt32 cMask, UInt32 oMask) {
 			Impl.Noise(buf, lenBytes, cMask, oMask);
 		}
-		public static void Noise(IntPtr buf, UInt32 lenBytes, UInt32 cMask, UInt32 oMask) {
-			Impl.Noise(buf, lenBytes, cMask, oMask);
-		}
 		
+		public static void Clear(IntPtr buf, UInt32 lenBytes, UInt32 color, UInt32 oMask) {
+			Impl.Clear(buf, lenBytes, color, oMask);
+		}
+
+		public static void CRemap(IntPtr buf, UInt32 lenBytes, UInt32 cMask) {
+			Impl.CRemap(buf, lenBytes, cMask);
+		}
+
 		
 		public static void Blend(BlendMode mode, IntPtr buf1, IntPtr buf2, UInt32 lenBytes, float O, bool useSrcAlpha) {
 			if(useSrcAlpha) {

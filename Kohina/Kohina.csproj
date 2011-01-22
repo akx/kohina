@@ -65,6 +65,7 @@
     <Compile Include="NodePropertyProxy.cs" />
     <Compile Include="NodeRegistry.cs" />
     <Compile Include="Nodes\BitmapBlender.cs" />
+    <Compile Include="Nodes\BitmapChannelRemap.cs" />
     <Compile Include="Nodes\BitmapColorMixer.cs" />
     <Compile Include="Nodes\BitmapFileReader.cs" />
     <Compile Include="Nodes\BitmapNoise.cs" />
