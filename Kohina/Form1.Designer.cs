@@ -27,6 +27,7 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.xmlToCBButton = new System.Windows.Forms.ToolStripButton();
+			this.readXMLBtn = new System.Windows.Forms.ToolStripButton();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.leftTabs = new System.Windows.Forms.TabControl();
 			this.propsTab = new System.Windows.Forms.TabPage();
@@ -40,7 +41,6 @@
 			this.nodeListView = new System.Windows.Forms.ListView();
 			this.connTabPage = new System.Windows.Forms.TabPage();
 			this.connectionViewPanel1 = new Kohina.ConnectionViewPanel();
-			this.readXMLBtn = new System.Windows.Forms.ToolStripButton();
 			this.toolStrip1.SuspendLayout();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -56,9 +56,9 @@
 			// 
 			// statusStrip1
 			// 
-			this.statusStrip1.Location = new System.Drawing.Point(0, 539);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 540);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(844, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(984, 22);
 			this.statusStrip1.TabIndex = 0;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -69,7 +69,7 @@
 									this.readXMLBtn});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(844, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(984, 25);
 			this.toolStrip1.TabIndex = 1;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -82,6 +82,16 @@
 			this.xmlToCBButton.Size = new System.Drawing.Size(70, 22);
 			this.xmlToCBButton.Text = "XML To CB";
 			this.xmlToCBButton.Click += new System.EventHandler(this.XmlToCBButtonClick);
+			// 
+			// readXMLBtn
+			// 
+			this.readXMLBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.readXMLBtn.Image = ((System.Drawing.Image)(resources.GetObject("readXMLBtn.Image")));
+			this.readXMLBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.readXMLBtn.Name = "readXMLBtn";
+			this.readXMLBtn.Size = new System.Drawing.Size(122, 22);
+			this.readXMLBtn.Text = "XML on CB To World";
+			this.readXMLBtn.Click += new System.EventHandler(this.ReadXMLBtnClick);
 			// 
 			// splitContainer1
 			// 
@@ -96,8 +106,8 @@
 			// splitContainer1.Panel2
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.nodeTabCtrl);
-			this.splitContainer1.Size = new System.Drawing.Size(844, 514);
-			this.splitContainer1.SplitterDistance = 281;
+			this.splitContainer1.Size = new System.Drawing.Size(984, 515);
+			this.splitContainer1.SplitterDistance = 180;
 			this.splitContainer1.TabIndex = 2;
 			// 
 			// leftTabs
@@ -108,7 +118,7 @@
 			this.leftTabs.Location = new System.Drawing.Point(0, 0);
 			this.leftTabs.Name = "leftTabs";
 			this.leftTabs.SelectedIndex = 0;
-			this.leftTabs.Size = new System.Drawing.Size(281, 514);
+			this.leftTabs.Size = new System.Drawing.Size(180, 515);
 			this.leftTabs.TabIndex = 0;
 			// 
 			// propsTab
@@ -117,7 +127,7 @@
 			this.propsTab.Location = new System.Drawing.Point(4, 22);
 			this.propsTab.Margin = new System.Windows.Forms.Padding(0);
 			this.propsTab.Name = "propsTab";
-			this.propsTab.Size = new System.Drawing.Size(273, 488);
+			this.propsTab.Size = new System.Drawing.Size(172, 489);
 			this.propsTab.TabIndex = 0;
 			this.propsTab.Text = "Properties";
 			this.propsTab.UseVisualStyleBackColor = true;
@@ -134,7 +144,7 @@
 			this.propTablePanel.RowCount = 2;
 			this.propTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.propTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.propTablePanel.Size = new System.Drawing.Size(273, 488);
+			this.propTablePanel.Size = new System.Drawing.Size(172, 489);
 			this.propTablePanel.TabIndex = 0;
 			// 
 			// constPropGrid
@@ -144,7 +154,7 @@
 			this.constPropGrid.Location = new System.Drawing.Point(0, 244);
 			this.constPropGrid.Margin = new System.Windows.Forms.Padding(0);
 			this.constPropGrid.Name = "constPropGrid";
-			this.constPropGrid.Size = new System.Drawing.Size(273, 244);
+			this.constPropGrid.Size = new System.Drawing.Size(172, 245);
 			this.constPropGrid.TabIndex = 2;
 			this.constPropGrid.ToolbarVisible = false;
 			// 
@@ -155,7 +165,7 @@
 			this.pinPropGrid.Location = new System.Drawing.Point(0, 0);
 			this.pinPropGrid.Margin = new System.Windows.Forms.Padding(0);
 			this.pinPropGrid.Name = "pinPropGrid";
-			this.pinPropGrid.Size = new System.Drawing.Size(273, 244);
+			this.pinPropGrid.Size = new System.Drawing.Size(172, 244);
 			this.pinPropGrid.TabIndex = 1;
 			this.pinPropGrid.ToolbarVisible = false;
 			// 
@@ -189,7 +199,7 @@
 			this.nodeTabCtrl.Location = new System.Drawing.Point(0, 0);
 			this.nodeTabCtrl.Name = "nodeTabCtrl";
 			this.nodeTabCtrl.SelectedIndex = 0;
-			this.nodeTabCtrl.Size = new System.Drawing.Size(559, 514);
+			this.nodeTabCtrl.Size = new System.Drawing.Size(800, 515);
 			this.nodeTabCtrl.TabIndex = 0;
 			// 
 			// tabPage3
@@ -198,7 +208,7 @@
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(551, 488);
+			this.tabPage3.Size = new System.Drawing.Size(792, 489);
 			this.tabPage3.TabIndex = 0;
 			this.tabPage3.Text = "Node List";
 			this.tabPage3.UseVisualStyleBackColor = true;
@@ -208,7 +218,7 @@
 			this.nodeListView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.nodeListView.Location = new System.Drawing.Point(3, 3);
 			this.nodeListView.Name = "nodeListView";
-			this.nodeListView.Size = new System.Drawing.Size(545, 482);
+			this.nodeListView.Size = new System.Drawing.Size(786, 483);
 			this.nodeListView.TabIndex = 0;
 			this.nodeListView.UseCompatibleStateImageBehavior = false;
 			this.nodeListView.View = System.Windows.Forms.View.Tile;
@@ -230,26 +240,17 @@
 			this.connectionViewPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.connectionViewPanel1.Location = new System.Drawing.Point(3, 3);
 			this.connectionViewPanel1.Name = "connectionViewPanel1";
+			this.connectionViewPanel1.SelectedNode = null;
 			this.connectionViewPanel1.Size = new System.Drawing.Size(545, 482);
 			this.connectionViewPanel1.TabIndex = 0;
 			this.connectionViewPanel1.World = null;
 			this.connectionViewPanel1.NodeSelected += new Kohina.NodeEventHandler(this.ConnectionViewPanel1NodeSelected);
 			// 
-			// readXMLBtn
-			// 
-			this.readXMLBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.readXMLBtn.Image = ((System.Drawing.Image)(resources.GetObject("readXMLBtn.Image")));
-			this.readXMLBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.readXMLBtn.Name = "readXMLBtn";
-			this.readXMLBtn.Size = new System.Drawing.Size(122, 22);
-			this.readXMLBtn.Text = "XML on CB To World";
-			this.readXMLBtn.Click += new System.EventHandler(this.ReadXMLBtnClick);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(844, 561);
+			this.ClientSize = new System.Drawing.Size(984, 562);
 			this.Controls.Add(this.splitContainer1);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.statusStrip1);

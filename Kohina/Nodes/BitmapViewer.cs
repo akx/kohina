@@ -58,7 +58,7 @@ namespace Kohina.Nodes
 				Bitmap bmp = inputPin.Read<Bitmap>(req);
 				sw.Stop();
 				renderTime = sw.ElapsedTicks / (double)Stopwatch.Frequency * 1000;
-				if(bitmapPb.Image != null) {
+				if(bitmapPb.Image != bmp && bitmapPb.Image != null) {
 					bitmapPb.Image.Dispose();
 				}
 				bitmapPb.Image = bmp;

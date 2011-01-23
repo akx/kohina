@@ -49,18 +49,18 @@ namespace Kohina.Nodes
 					Math.Min(bmp1.Size.Width, bmp2.Size.Width),
 					Math.Min(bmp1.Size.Height, bmp2.Size.Height)
 				);
-				Bitmap r32B1 = new Bitmap(bmp1, sz);
-				Bitmap r32B2 = new Bitmap(bmp2, sz);
+				bmp1 = bmp1.ResizeIfNeeded(sz);
+				bmp2 = bmp2.ResizeIfNeeded(sz);
 				Rectangle r = new Rectangle(0, 0, sz.Width, sz.Height);
 				double mix = mixPin.Read<double>(request);
-				BitmapData b1Data = r32B1.LockBits(r, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-				BitmapData b2Data = r32B2.LockBits(r, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+				BitmapData b1Data = bmp1.LockBits(r, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+				BitmapData b2Data = bmp2.LockBits(r, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 				
 				CBlend.Blend(blendMode, b1Data.Scan0, b2Data.Scan0, (UInt32)(b1Data.Stride * b1Data.Height), (float)mix, useSrcAlpha);
-				r32B1.UnlockBits(b1Data);
-				r32B2.UnlockBits(b2Data);
-				r32B2.Dispose();
-				return r32B1;
+				bmp1.UnlockBits(b1Data);
+				bmp2.UnlockBits(b2Data);
+				bmp2.Dispose();
+				return bmp1;
 			}
 			return null;
 		}

@@ -61,6 +61,7 @@ namespace Kohina {
 			
 			BitmapViewer bv = new BitmapViewer();
 			w.AddNode(bv);
+			bv.UpdateInterval = 1000 / 20;
 			bv.GetPinByName("Input").Connect(cr.GetPinByName("Output"));
 			
 			
@@ -118,6 +119,7 @@ namespace Kohina {
 			constPropGrid.SelectedObject = null;
 			pinPropGrid.SelectedObject = pproxy;
 			constPropGrid.SelectedObject = node;
+			connectionViewPanel1.SelectedNode = node;
 			
 		}
 		

@@ -1,24 +1,27 @@
-﻿using System;
+﻿
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
 namespace Kohina.Nodes
 {
-	public class BitmapChannelRemap: Node
+	public enum ColorSpaceConvertMode {
+		RGBtoHSV = 0,
+		HSVtoRGB = 1
+	};
+	public class BitmapColorSpace: Node
 	{
 		[PinAttribs("Input", PinDirection.Input, DataType.Bitmap)]
 		Pin inputPin = null;
 		[PinAttribs("Output", PinDirection.Output, DataType.Bitmap)]
 		Pin outputPin = null;
 		
-		UInt32 mask = 0x18100800;
+		ColorSpaceConvertMode mode = ColorSpaceConvertMode.RGBtoHSV;
 		
-		public uint Mask {
-			get { return mask; }
-			set { mask = value; }
+		public ColorSpaceConvertMode Mode {
+			get { return mode; }
+			set { mode = value; }
 		}
-		
-		
 		
 		
 		public override object GetPinValue(Pin pin, PinRequest request)
@@ -31,7 +34,7 @@ namespace Kohina.Nodes
 				);
 				Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
 				BitmapData bData = bmp.LockBits(r, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-				CBlend.CRemap(bData.Scan0, (UInt32)(bData.Stride * bData.Height), mask);
+				CBlend.ConvertColorSpace(bData.Scan0, (UInt32)(bData.Stride * bData.Height), (int)mode);
 				bmp.UnlockBits(bData);
 				return bmp;
 			}
