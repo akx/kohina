@@ -2,3 +2,4 @@ syntax: glob
 bin
 obj
 CBlend/*.{dll,exe,a}
+ProfilingSessions

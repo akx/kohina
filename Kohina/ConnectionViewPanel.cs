@@ -44,6 +44,27 @@ namespace Kohina
 		bool mbDown;
 		public event NodeEventHandler NodeSelected;
 		
+		static Pen connPen = new Pen(Color.White) {
+			Width = 2,
+	    };
+		static Pen aConnPen = new Pen(Color.Yellow) {
+			Width = 4,
+	    };
+		static Pen nodePen = Pens.Black;
+		static Pen aNodePen = new Pen(nodePen.Color) {
+			Width = 2,
+			Alignment = PenAlignment.Outset
+		};
+				
+		
+		Node selectedNode = null;
+		
+		public Node SelectedNode {
+			get { return selectedNode; }
+			set { selectedNode = value; }
+		}
+		
+		
 		protected virtual void OnNodeSelected(NodeEventArgs e)
 		{
 			if (NodeSelected != null) {
@@ -224,12 +245,7 @@ namespace Kohina
 			}
 			
 			Font f = new Font("Segoe UI", 8);
-			Pen connPen = new Pen(Color.White) {
-				Width = 2,
-		    };
-			Pen aConnPen = new Pen(Color.Yellow) {
-				Width = 4,
-		    };
+			
 			
 			GraphicsState baseState = g.Save();
 			g.Clear(Color.Gray);
@@ -246,12 +262,12 @@ namespace Kohina
 				CVPinInfo pi = pinInfos[holdingPin];
 				g.DrawLine(Pens.Wheat, pi.Location.X + 2, pi.Location.Y + 2, mousePos.X, mousePos.Y);
 			}
-			
+			g.SmoothingMode = SmoothingMode.None;
 			foreach(CVNodeInfo cni in nodeInfos.Values) {
 				GraphicsState gs = g.Save();
 				g.TranslateTransform(cni.Location.X, cni.Location.Y);
 				g.FillRectangle(Brushes.WhiteSmoke, 0, 0, 150, cni.Height);
-				g.DrawRectangle(Pens.Black, 0, 0, 150, cni.Height);
+				g.DrawRectangle((cni.Node == selectedNode ? aNodePen : nodePen), 0, 0, 150, cni.Height);
 				g.DrawString(cni.Node.ToString(), f, Brushes.Black, 3, 3);
 
 				foreach(Pin p in cni.Node.AllPins) {

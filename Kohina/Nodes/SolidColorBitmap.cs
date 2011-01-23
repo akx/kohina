@@ -30,10 +30,12 @@ namespace Kohina.Nodes
 		{
 			if(pin == outputPin) {
 				Size sz = (request is BitmapPinRequest) ? ((BitmapPinRequest)request).DesiredSize : size;
-				Bitmap bmp = new Bitmap(sz.Width, sz.Height, PixelFormat.Format32bppPArgb);
-				using(Graphics g = Graphics.FromImage(bmp)) {
-					g.Clear(colorPin.Read<Color>());
-				}
+				Color c = colorPin.Read<Color>();
+				Bitmap bmp = new Bitmap(sz.Width, sz.Height, PixelFormat.Format32bppArgb);
+				Rectangle r = bmp.GetEntireRect();
+				BitmapData bd = bmp.LockBits(r, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+				CBlend.Clear(bd.Scan0, (UInt32)(bd.Stride * bd.Height), (uint)c.ToArgb(), 0xFFFFFFFF);
+				bmp.UnlockBits(bd);
 				return bmp;
 			}
 			return null;

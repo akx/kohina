@@ -44,6 +44,8 @@ namespace Kohina {
 			public static extern void Clear(IntPtr buf, UInt32 lenBytes, UInt32 color, UInt32 oMask);
 			[DllImport("cblend.dll")]
 			public static extern void CRemap(IntPtr buf, UInt32 lenBytes, UInt32 cMask);
+			[DllImport("cblend.dll")]
+			public static extern void ConvertColorSpace(IntPtr buf, UInt32 lenBytes, byte mode);
 		}
 		
 		public static void Seed(int seed) {
@@ -60,6 +62,10 @@ namespace Kohina {
 
 		public static void CRemap(IntPtr buf, UInt32 lenBytes, UInt32 cMask) {
 			Impl.CRemap(buf, lenBytes, cMask);
+		}
+		
+		public static void ConvertColorSpace(IntPtr buf, UInt32 lenBytes, int mode) {
+			Impl.ConvertColorSpace(buf, lenBytes, (byte)mode);
 		}
 
 		

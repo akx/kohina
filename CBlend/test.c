@@ -6,6 +6,7 @@
 
 void Noise(uint8_t *buf, uint32_t lenBytes, uint32_t aMask, uint32_t oMask);
 void Seed(uint32_t);
+void ConvertColorSpace(uint8_t *buf, uint32_t lenBytes, uint8_t mode);
 
 float ent(uint8_t *buf, uint32_t lenBytes) {
 	uint8_t *end = buf + lenBytes;
@@ -24,19 +25,22 @@ float ent(uint8_t *buf, uint32_t lenBytes) {
 int main() {
 	uint8_t *buf1, *buf2;
 	const uint32_t w = 320, h = 240;
-	buf1 = malloc(w * h * 4);
-	buf2 = malloc(w * h * 4);
+	const uint32_t nBytes = w * h * 4;
+	buf1 = malloc(nBytes);
+	buf2 = malloc(nBytes);
 	Seed(time(NULL));
 	for(int i = 0; i <= B__LAST; i++) {
-		Noise(buf1, w * h * 4, 0xFFFFFFFF, 0xFFFFFFFF);
-		Noise(buf2, w * h * 4, 0xFFFFFFFF, 0xFFFFFFFF);
+		Noise(buf1, nBytes, 0xFFFFFFFF, 0xFFFFFFFF);
+		Noise(buf2, nBytes, 0xFFFFFFFF, 0xFFFFFFFF);
 		//printf("Testing %d...\n", i);
-		Blend(i, buf1, buf2, w * h * 4, .7);
-		Noise(buf2, w * h * 4, 0xFFFFFFFF, 0xFFFFFFFF);
-		BlendV(i, buf1, buf2, w * h * 4, .6);
+		Blend(i, buf1, buf2, nBytes, .7);
+		ConvertColorSpace(buf1, nBytes, 0);
+		Noise(buf2, nBytes, 0xFFFFFFFF, 0xFFFFFFFF);
+		BlendV(i, buf1, buf2, nBytes, .6);
+		ConvertColorSpace(buf1, nBytes, 1);
 	}
 	
 	//printf("Testing noise...\n");
-	Noise(buf1, w * h * 4, 0xFFFFFFFF, 0xFFFFFFFF);
-	//printf("Noise entropy = %f\n", ent(buf1, w * h * 4));
+	Noise(buf1, nBytes, 0xFFFFFFFF, 0xFFFFFFFF);
+
 }

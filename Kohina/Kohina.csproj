@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitmapPinRequest.cs" />
+    <Compile Include="Caches.cs" />
     <Compile Include="CBlend.cs" />
     <Compile Include="Colors\Converters.cs" />
     <Compile Include="Colors\Recognizers.cs" />
@@ -67,7 +68,9 @@
     <Compile Include="Nodes\BitmapBlender.cs" />
     <Compile Include="Nodes\BitmapChannelRemap.cs" />
     <Compile Include="Nodes\BitmapColorMixer.cs" />
+    <Compile Include="Nodes\BitmapColorSpace.cs" />
     <Compile Include="Nodes\BitmapFileReader.cs" />
+    <Compile Include="Nodes\BitmapJPEGTransmuter.cs" />
     <Compile Include="Nodes\BitmapNoise.cs" />
     <Compile Include="Nodes\BitmapViewer.cs" />
     <Compile Include="Nodes\BitmapXBlender.cs" />
@@ -100,11 +103,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SoundBuffer.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="World.cs" />
+    <Content Include="ProfilingSessions\Session20110122_134702.sdps" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Colors" />
     <Folder Include="Events" />
+    <Folder Include="Caching" />
     <Folder Include="Nodes" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
