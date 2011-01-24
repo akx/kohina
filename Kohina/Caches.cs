@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Kohina
 {
+	public delegate T CacheSetter<T>();
 	public class MRUCache<T> where T: class {
 		Dictionary<string, T> items = new Dictionary<string, T>();
 		Dictionary<string, uint> uTimes = new Dictionary<string, uint>();
@@ -24,11 +26,17 @@ namespace Kohina
 			return val;
 		}
 		
-		public void Set(string key, T obj) {
+		public T Set(string key, T obj) {
 			items[key] = obj;
 			if(items.Count > maxItems) {
 				Cull();
 			}
+			return obj;
+		}
+	
+		public T GetOrSet(string key, CacheSetter<T> setter) {
+			if(items.ContainsKey(key)) return Get(key);
+			return Set(key, setter());
 		}
 		
 		public void Cull() {
@@ -41,5 +49,9 @@ namespace Kohina
 				items.Remove(kvps[i].Key);
 			}
 		}
+	}
+
+	public static class Caches {
+		public static readonly MRUCache<Bitmap> BitmapCache = new MRUCache<Bitmap>(30);
 	}
 }

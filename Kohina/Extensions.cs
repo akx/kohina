@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Drawing;
+using System.Xml.Linq;
 
 namespace Kohina
 {
@@ -24,6 +25,20 @@ namespace Kohina
 				return nb;
 			}
 			return b;
+		}
+		
+		public static string GetAttributeOrDefault(this XElement el, string attrName, string defaultValue) {
+			XAttribute attr = el.Attribute(attrName);
+			if(attr == null) return defaultValue;
+			return attr.Value;
+		}
+		
+		public delegate T StringConverter<T>(string s);
+		public static T GetAttributeOrDefault<T>(this XElement el, string attrName, T defaultValue, StringConverter<T> converter) {
+			XAttribute attr = el.Attribute(attrName);
+			if(attr == null) return defaultValue;
+			if((typeof(T)).IsSubclassOf(typeof(Enum))) return (T)Enum.Parse(typeof(T), attr.Value, true);
+			return converter(attr.Value);
 		}
 	}
 }
