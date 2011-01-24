@@ -65,7 +65,7 @@ namespace Kohina {
 			bv.GetPinByName("Input").Connect(cr.GetPinByName("Output"));
 			
 			
-			connectionViewPanel1.World = w;
+			connView.World = w;
 			NodeRegistry.Instance.Populate();
 			UpdateNodeCatalogView();
 			UpdateNodeListView();
@@ -98,7 +98,7 @@ namespace Kohina {
 				nodeListView.Items.Add(lvi);
 			}
 			nodeListView.EndUpdate();
-			connectionViewPanel1.Refresh();
+			connView.Refresh();
 		}
 		
 		void NodeListViewItemActivate(object sender, EventArgs e)
@@ -119,7 +119,7 @@ namespace Kohina {
 			constPropGrid.SelectedObject = null;
 			pinPropGrid.SelectedObject = pproxy;
 			constPropGrid.SelectedObject = node;
-			connectionViewPanel1.SelectedNode = node;
+			connView.SelectedNode = node;
 			
 		}
 		
@@ -130,7 +130,7 @@ namespace Kohina {
 			w.AddNode(n);
 			UpdateNodeListView();
 			SelectNode(n);
-			connectionViewPanel1.Refresh();
+			connView.Refresh();
 			leftTabs.SelectedTab = propsTab;
 		}
 		
@@ -152,6 +152,11 @@ namespace Kohina {
 			XElement el = XElement.Parse(Clipboard.GetText());
 			w.ParseXML(el);
 			UpdateNodeListView();
+		}
+		
+		void PinPropGridPropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+		{
+			connView.Refresh();
 		}
 	}
 }

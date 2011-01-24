@@ -40,7 +40,7 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.nodeListView = new System.Windows.Forms.ListView();
 			this.connTabPage = new System.Windows.Forms.TabPage();
-			this.connectionViewPanel1 = new Kohina.ConnectionViewPanel();
+			this.connView = new Kohina.ConnectionViewPanel();
 			this.toolStrip1.SuspendLayout();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -157,6 +157,7 @@
 			this.constPropGrid.Size = new System.Drawing.Size(172, 245);
 			this.constPropGrid.TabIndex = 2;
 			this.constPropGrid.ToolbarVisible = false;
+			this.constPropGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PinPropGridPropertyValueChanged);
 			// 
 			// pinPropGrid
 			// 
@@ -168,6 +169,7 @@
 			this.pinPropGrid.Size = new System.Drawing.Size(172, 244);
 			this.pinPropGrid.TabIndex = 1;
 			this.pinPropGrid.ToolbarVisible = false;
+			this.pinPropGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PinPropGridPropertyValueChanged);
 			// 
 			// tabPage2
 			// 
@@ -175,7 +177,7 @@
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(273, 488);
+			this.tabPage2.Size = new System.Drawing.Size(172, 489);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Node Catalog";
 			this.tabPage2.UseVisualStyleBackColor = true;
@@ -185,7 +187,7 @@
 			this.nodeCatalogList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.nodeCatalogList.Location = new System.Drawing.Point(3, 3);
 			this.nodeCatalogList.Name = "nodeCatalogList";
-			this.nodeCatalogList.Size = new System.Drawing.Size(267, 482);
+			this.nodeCatalogList.Size = new System.Drawing.Size(166, 483);
 			this.nodeCatalogList.TabIndex = 0;
 			this.nodeCatalogList.UseCompatibleStateImageBehavior = false;
 			this.nodeCatalogList.View = System.Windows.Forms.View.List;
@@ -226,25 +228,25 @@
 			// 
 			// connTabPage
 			// 
-			this.connTabPage.Controls.Add(this.connectionViewPanel1);
+			this.connTabPage.Controls.Add(this.connView);
 			this.connTabPage.Location = new System.Drawing.Point(4, 22);
 			this.connTabPage.Name = "connTabPage";
 			this.connTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.connTabPage.Size = new System.Drawing.Size(551, 488);
+			this.connTabPage.Size = new System.Drawing.Size(792, 489);
 			this.connTabPage.TabIndex = 1;
 			this.connTabPage.Text = "Connection View";
 			this.connTabPage.UseVisualStyleBackColor = true;
 			// 
 			// connectionViewPanel1
 			// 
-			this.connectionViewPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.connectionViewPanel1.Location = new System.Drawing.Point(3, 3);
-			this.connectionViewPanel1.Name = "connectionViewPanel1";
-			this.connectionViewPanel1.SelectedNode = null;
-			this.connectionViewPanel1.Size = new System.Drawing.Size(545, 482);
-			this.connectionViewPanel1.TabIndex = 0;
-			this.connectionViewPanel1.World = null;
-			this.connectionViewPanel1.NodeSelected += new Kohina.NodeEventHandler(this.ConnectionViewPanel1NodeSelected);
+			this.connView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.connView.Location = new System.Drawing.Point(3, 3);
+			this.connView.Name = "connectionViewPanel1";
+			this.connView.SelectedNode = null;
+			this.connView.Size = new System.Drawing.Size(786, 483);
+			this.connView.TabIndex = 0;
+			this.connView.World = null;
+			this.connView.NodeSelected += new Kohina.NodeEventHandler(this.ConnectionViewPanel1NodeSelected);
 			// 
 			// MainForm
 			// 
@@ -274,7 +276,7 @@
 		}
 		private System.Windows.Forms.ToolStripButton readXMLBtn;
 		private System.Windows.Forms.ToolStripButton xmlToCBButton;
-		private Kohina.ConnectionViewPanel connectionViewPanel1;
+		private Kohina.ConnectionViewPanel connView;
 		private System.Windows.Forms.TabControl nodeTabCtrl;
 		private System.Windows.Forms.TabPage connTabPage;
 		private System.Windows.Forms.TabControl leftTabs;

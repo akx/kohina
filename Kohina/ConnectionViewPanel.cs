@@ -40,14 +40,15 @@ namespace Kohina
 		Timer updateTimer = new Timer() { Interval = 30 };
 		Pin holdingPin = null;
 		Pin highlightPin = null;
+		Node highlightNode = null;
 		Point mousePos;
 		bool mbDown;
 		public event NodeEventHandler NodeSelected;
 		
-		static Pen connPen = new Pen(Color.White) {
+		static Pen connPen = new Pen(Color.DarkGray) {
 			Width = 2,
 	    };
-		static Pen aConnPen = new Pen(Color.Yellow) {
+		static Pen aConnPen = new Pen(Color.OrangeRed) {
 			Width = 4,
 	    };
 		static Pen nodePen = Pens.Black;
@@ -55,6 +56,12 @@ namespace Kohina
 			Width = 2,
 			Alignment = PenAlignment.Outset
 		};
+		
+		static Font titleFont = new Font("Segoe UI", 8, FontStyle.Bold);
+		static Font noteFont = new Font("Segoe UI", 6);
+		static Font pinFont = new Font("Segoe UI", 8);
+		
+		const int NODE_WIDTH = 150;
 				
 		
 		Node selectedNode = null;
@@ -108,6 +115,15 @@ namespace Kohina
 			return null;
 		}
 		
+		private CVNodeInfo FindNodeTitleAt(Point loc) {
+			foreach(CVNodeInfo cni in nodeInfos.Values) {
+				if(loc.X >= cni.Location.X && loc.X <= cni.Location.X + NODE_WIDTH && loc.Y >= cni.Location.Y && loc.Y <= cni.Location.Y + 20) {
+					return cni;
+				}
+			}
+			return null;
+		}
+		
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseDown(e);
@@ -119,14 +135,14 @@ namespace Kohina
 				Capture = true;
 				return;
 			}
-			foreach(CVNodeInfo cni in nodeInfos.Values) {
-				if(e.X >= cni.Location.X && e.X <= cni.Location.X + 150 && e.Y >= cni.Location.Y && e.Y <= cni.Location.Y + 20) {
-					if((Control.ModifierKeys & Keys.Shift) == Keys.Shift) {
-						cni.Node.Interact();
-						return;
-					} else {
-						OnNodeSelected(new NodeEventArgs(cni.Node));
-					}
+			CVNodeInfo nodeAtCur = FindNodeTitleAt(e.Location);
+			if(nodeAtCur != null) {
+				if((Control.ModifierKeys & Keys.Shift) == Keys.Shift) {
+					nodeAtCur.Node.Interact();
+					Refresh();
+					return;
+				} else {
+					OnNodeSelected(new NodeEventArgs(nodeAtCur.Node));
 				}
 			}
 			mbDown = true;
@@ -141,9 +157,15 @@ namespace Kohina
 				Pin hlPin = (pinAtCur != null) ? pinAtCur.Pin : null;
 				if(hlPin != highlightPin) {
 					highlightPin = hlPin;
-					
 					Refresh();
 				}
+				CVNodeInfo nodeAtCur = FindNodeTitleAt(e.Location);
+				Node hlNode = (nodeAtCur != null) ? nodeAtCur.Node : null;
+				if(hlNode != highlightNode) {
+					highlightNode = hlNode;
+					Refresh();
+				}
+				
 			}
 			Cursor = Cursors.Arrow;
 			if(holdingPin != null) {
@@ -157,7 +179,7 @@ namespace Kohina
 				} else {
 					Cursor = Cursors.SizeAll;
 				}
-			} else if(highlightPin != null) {
+			} else if(highlightPin != null || highlightNode != null) {
 				Cursor = Cursors.Hand;
 			}
 		}
@@ -244,11 +266,10 @@ namespace Kohina
 				}
 			}
 			
-			Font f = new Font("Segoe UI", 8);
 			
 			
 			GraphicsState baseState = g.Save();
-			g.Clear(Color.Gray);
+			g.Clear(SystemColors.Window);
 			g.SmoothingMode = SmoothingMode.HighQuality;
 			foreach(CVPinInfo cpi in pinInfos.Values) {
 				
@@ -266,9 +287,12 @@ namespace Kohina
 			foreach(CVNodeInfo cni in nodeInfos.Values) {
 				GraphicsState gs = g.Save();
 				g.TranslateTransform(cni.Location.X, cni.Location.Y);
-				g.FillRectangle(Brushes.WhiteSmoke, 0, 0, 150, cni.Height);
-				g.DrawRectangle((cni.Node == selectedNode ? aNodePen : nodePen), 0, 0, 150, cni.Height);
-				g.DrawString(cni.Node.ToString(), f, Brushes.Black, 3, 3);
+				g.FillRectangle(Brushes.WhiteSmoke, 0, 0, NODE_WIDTH, cni.Height);
+				g.DrawRectangle((cni.Node == selectedNode ? aNodePen : nodePen), 0, 0, NODE_WIDTH, cni.Height);
+				g.DrawString(cni.Node.Name, titleFont, (cni.Node == highlightNode ? Brushes.Blue : Brushes.Black), 3, 3);
+				if(!string.IsNullOrEmpty(cni.Node.Note)) {
+					g.DrawString(cni.Node.Note, noteFont, Brushes.Black, 3, cni.Height + 3);
+				}
 
 				foreach(Pin p in cni.Node.AllPins) {
 					CVPinInfo pi = pinInfos[p];
@@ -278,7 +302,7 @@ namespace Kohina
 					g.DrawRectangle(Pens.Black, pi.LocalLocation.X, pi.LocalLocation.Y, 6, 6);
 					StringFormat sf = StringFormat.GenericDefault;
 					sf.Alignment = (p.Direction == PinDirection.Input) ? StringAlignment.Near : StringAlignment.Far;
-					g.DrawString(p.Name, f, Brushes.Black, new RectangleF(6, pi.LocalLocation.Y - 3, 140, 15), sf);
+					g.DrawString(p.Name, pinFont, Brushes.Black, new RectangleF(6, pi.LocalLocation.Y - 3, NODE_WIDTH - 10, 15), sf);
 
 				}
 				

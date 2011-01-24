@@ -1,23 +1,58 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Kohina.Nodes
 {
-	/// <summary>
-	/// Description of BitmapViewer.
-	/// </summary>
+	class BitmapViewerWindow: Form {
+		
+		Bitmap pBitmap = null;
+		
+		public Bitmap PBitmap {
+			get { return pBitmap; }
+			set { 
+				if(pBitmap != null) pBitmap.Dispose();
+				pBitmap = value;
+			}
+		}
+		
+		public BitmapViewerWindow()
+		{
+			DoubleBuffered = true;
+			SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+			SetStyle(ControlStyles.DoubleBuffer, true);
+			
+		}
+		
+		
+		
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			e.Graphics.Clear(Color.Black);
+			if(pBitmap != null) {
+				e.Graphics.DrawImage(pBitmap, 0, 0);//DrawImageUnscaledAndClipped(pBitmap, e.ClipRectangle);
+			}
+		}
+		
+		protected override void OnPaintBackground(PaintEventArgs e)
+		{
+
+		}
+		
+	}
+	
+	
 	public class BitmapViewer: Node
 	{
 		[PinAttribs("Input", PinDirection.Input, DataType.Bitmap)]
 		Pin inputPin = null;
 		
-		Form bitmapWin;
-		PictureBox bitmapPb;
-		Timer updateTimer;
+		BitmapViewerWindow bitmapWin;
+		System.Windows.Forms.Timer updateTimer;
 		DateTime startTime;
-		Stopwatch sw, fpsSw;
+		Stopwatch fpsSw;
 		double renderTime, fps;
 		int frames;
 		
@@ -38,37 +73,50 @@ namespace Kohina.Nodes
 		
 		public BitmapViewer()
 		{
-			updateTimer = new Timer();
+			updateTimer = new System.Windows.Forms.Timer();
 			updateTimer.Interval = updateInterval;
 			updateTimer.Tick += new EventHandler(updateTimer_Tick);
-			sw = new Stopwatch();
 			fpsSw = new Stopwatch();
 			frames = 0;
+		}
+		
+		private Bitmap ReadInput(BitmapPinRequest req) {
+			Bitmap bmp;
+			Stopwatch sw = new Stopwatch();
+			sw.Start();
+			bmp = inputPin.Read<Bitmap>(req);
+			sw.Stop();
+			renderTime = sw.ElapsedTicks / (double)Stopwatch.Frequency * 1000;
+			
+			return bmp;
+			
+		}
+		
+		void DoUpdate(Object obj) {
+			
+			BitmapPinRequest req = new BitmapPinRequest();
+			req.Time = (DateTime.Now - startTime).TotalSeconds;
+			req.DesiredSize = desiredSize;
+			Bitmap bmp = ReadInput(req);
+			bitmapWin.PBitmap = bmp;
+			bitmapWin.Invalidate();
+			
 		}
 
 		void updateTimer_Tick(object sender, EventArgs e)
 		{
-			if(bitmapPb != null && bitmapWin.Visible) {
+			if(bitmapWin != null && bitmapWin.Visible) {
 				if(!fpsSw.IsRunning) fpsSw.Start();
-				BitmapPinRequest req = new BitmapPinRequest();
-				req.Time = (DateTime.Now - startTime).TotalSeconds;
-				req.DesiredSize = desiredSize;
-				sw.Reset();
-				sw.Start();
-				Bitmap bmp = inputPin.Read<Bitmap>(req);
-				sw.Stop();
-				renderTime = sw.ElapsedTicks / (double)Stopwatch.Frequency * 1000;
-				if(bitmapPb.Image != bmp && bitmapPb.Image != null) {
-					bitmapPb.Image.Dispose();
-				}
-				bitmapPb.Image = bmp;
 				frames++;
 				if(fpsSw.ElapsedMilliseconds > 1000) {
 					fps = frames / (fpsSw.ElapsedMilliseconds / 1000.0);
 					frames = 0;
 					fpsSw.Reset();
 				}
-				bitmapWin.Text = string.Format("FPS: {0} | T = {1} (rt = {2:2} msec)", fps, req.Time.ToString(), renderTime);
+				bitmapWin.Text = string.Format("FPS: {0:0.000} | Rt = {1:#.00}ms", fps, renderTime);
+				lock(inputPin) {
+					ThreadPool.QueueUserWorkItem(new WaitCallback(DoUpdate));
+				}
 			} else {
 				fpsSw.Stop();
 			}
@@ -76,17 +124,9 @@ namespace Kohina.Nodes
 		
 		public override void Interact() {
 			if(bitmapWin == null) {
-				bitmapWin = new Form() {
+				bitmapWin = new BitmapViewerWindow() {
 					Size = new Size(480, 320)
 				};
-				bitmapWin.SuspendLayout();
-				bitmapPb = new PictureBox() {
-					Dock = DockStyle.Fill,
-					Parent = bitmapWin,
-					Visible = true,
-					Size = bitmapWin.Size
-				};
-				bitmapWin.ResumeLayout(true);
 				bitmapWin.Show();
 				updateTimer.Enabled = true;
 				startTime = DateTime.Now;
@@ -109,3 +149,4 @@ namespace Kohina.Nodes
 		
 	}
 }
+

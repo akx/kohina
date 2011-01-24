@@ -15,9 +15,25 @@ namespace Kohina {
 		World world;
 		Guid guid;
 		
+		string name = "";
+		string note = "";
+		
+		[Browsable(false)]
 		public Guid Guid {
 			get { return guid; }
 		}
+		
+		public string Name {
+			get { return name; }
+			set { name = value; }
+		}
+		
+		public string Note {
+			get { return note; }
+			set { note = value; }
+		}
+		
+		
 		
 		
 		[Browsable(false)]
@@ -111,16 +127,12 @@ namespace Kohina {
 		
 		protected Node() {
 			guid = Guid.NewGuid();
+			name = GetType().Name;
 			InitPins();
 		}
 		
 		public NodePropertyProxy GetPropertyProxy() {
 			return new NodePropertyProxy(this);
-		}
-		
-		public override string ToString()
-		{
-			return GetType().Name;
 		}
 		
 		public int RecurGetConnectedInputs() {
@@ -135,6 +147,8 @@ namespace Kohina {
 			XElement el = new XElement("Node");
 			el.SetAttributeValue("type", GetType().Name);
 			el.SetAttributeValue("guid", guid);
+			if(!string.IsNullOrEmpty(name)) el.SetAttributeValue("name", name);
+			if(!string.IsNullOrEmpty(note)) el.SetAttributeValue("note", note);
 			foreach(Pin p in AllPins) {
 				XElement pcEl = p.SerializeToXML();
 				if(pcEl != null) el.Add(pcEl);
@@ -166,6 +180,8 @@ namespace Kohina {
 			Debug.Print("{0} => {1}", typeName, t);
 			Node n = (Node)Activator.CreateInstance(t);
 			n.guid = new Guid(el.Attribute("guid").Value);
+			n.name = el.GetAttributeOrDefault("name", n.name);
+			n.note = el.GetAttributeOrDefault("note", "");
 			foreach(XElement pEl in el.Elements("Property")) {
 				PropertyInfo pi = t.GetProperty(pEl.Attribute("name").Value);
 				if(pi != null) {
@@ -185,6 +201,11 @@ namespace Kohina {
 		public virtual void Dispose()
 		{
 		
+		}
+		
+		public override string ToString()
+		{
+			return string.Format("{0} (GUID={1})", GetType().Name, guid);
 		}
 		
 	}

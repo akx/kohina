@@ -106,6 +106,8 @@
     <Compile Include="Utils.cs" />
     <Compile Include="World.cs" />
     <Content Include="ProfilingSessions\Session20110122_134702.sdps" />
+    <Content Include="ProfilingSessions\Session20110124_011819.sdps" />
+    <Content Include="ProfilingSessions\Session20110124_012436.sdps" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Colors" />
