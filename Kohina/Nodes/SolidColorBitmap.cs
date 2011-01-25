@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 
 namespace Kohina.Nodes
 {
+	[NodeCategoryAttribute(DataType.Bitmap, NodeCategoryKind.Generator)]
 	public class SolidColorBitmap: Node
 	{
 		[PinAttribs("Output", PinDirection.Output, DataType.Bitmap)]

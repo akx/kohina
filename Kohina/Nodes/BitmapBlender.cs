@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 
 namespace Kohina.Nodes
 {
+	[NodeCategoryAttribute(DataType.Bitmap, NodeCategoryKind.Mixer)]
 	public class BitmapBlender: Node
 	{
 		[PinAttribs("Input 1", PinDirection.Input, DataType.Bitmap)]

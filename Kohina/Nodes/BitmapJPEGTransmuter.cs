@@ -8,9 +8,8 @@ using System.Linq;
 
 namespace Kohina.Nodes
 {
-	/// <summary>
-	/// Description of BitmapJPEGTransmuter.
-	/// </summary>
+	
+	[NodeCategoryAttribute(DataType.Bitmap, NodeCategoryKind.Modifier)]
 	public class BitmapJPEGTransmuter: Node
 	{
 		[PinAttribs("Input", PinDirection.Input, DataType.Bitmap)]

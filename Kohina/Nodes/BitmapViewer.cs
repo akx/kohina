@@ -43,7 +43,7 @@ namespace Kohina.Nodes
 		
 	}
 	
-	
+	[NodeCategoryAttribute(DataType.Bitmap, NodeCategoryKind.Output)]
 	public class BitmapViewer: Node
 	{
 		[PinAttribs("Input", PinDirection.Input, DataType.Bitmap)]
@@ -55,6 +55,7 @@ namespace Kohina.Nodes
 		Stopwatch fpsSw;
 		double renderTime, fps;
 		int frames;
+		bool busyUpdating = false;
 		
 		Size desiredSize = new Size(400, 400);
 		
@@ -93,14 +94,17 @@ namespace Kohina.Nodes
 		}
 		
 		void DoUpdate(Object obj) {
-			
-			BitmapPinRequest req = new BitmapPinRequest();
-			req.Time = (DateTime.Now - startTime).TotalSeconds;
-			req.DesiredSize = desiredSize;
-			Bitmap bmp = ReadInput(req);
-			bitmapWin.PBitmap = bmp;
-			bitmapWin.Invalidate();
-			
+			if(busyUpdating) return;
+			lock(inputPin) {
+				busyUpdating = true;
+				BitmapPinRequest req = new BitmapPinRequest();
+				req.Time = (DateTime.Now - startTime).TotalSeconds;
+				req.DesiredSize = desiredSize;
+				Bitmap bmp = ReadInput(req);
+				bitmapWin.PBitmap = bmp;
+				bitmapWin.Invalidate();
+				busyUpdating = false;
+			}
 		}
 
 		void updateTimer_Tick(object sender, EventArgs e)
@@ -114,9 +118,7 @@ namespace Kohina.Nodes
 					fpsSw.Reset();
 				}
 				bitmapWin.Text = string.Format("FPS: {0:0.000} | Rt = {1:#.00}ms", fps, renderTime);
-				lock(inputPin) {
-					ThreadPool.QueueUserWorkItem(new WaitCallback(DoUpdate));
-				}
+				if(!busyUpdating) ThreadPool.QueueUserWorkItem(new WaitCallback(DoUpdate));
 			} else {
 				fpsSw.Stop();
 			}

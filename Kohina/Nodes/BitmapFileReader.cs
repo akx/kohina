@@ -6,6 +6,7 @@ using System.IO;
 
 namespace Kohina.Nodes
 {
+	[NodeCategoryAttribute(DataType.Bitmap, NodeCategoryKind.Generator)]
 	public class BitmapFileReader: Node
 	{	
 		[PinAttribs("Output", PinDirection.Output, DataType.Bitmap)]

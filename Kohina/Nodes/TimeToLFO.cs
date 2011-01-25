@@ -3,9 +3,7 @@ using System;
 
 namespace Kohina.Nodes
 {
-	/// <summary>
-	/// Description of TimeToLFO.
-	/// </summary>
+	[NodeCategoryAttribute(DataType.Number, NodeCategoryKind.Generator)]
 	public class TimeToLFO: Node
 	{
 		[PinAttribs("Frequency", PinDirection.Input, DataType.Number)]

@@ -22,6 +22,15 @@ namespace Kohina
 			}
 		}
 		
+		public void RemoveNode(Node toRemove) {
+			nodes.Remove(toRemove);
+			foreach(Node n in nodes) {
+				foreach(Pin p in n.InputPins) {
+					if(p.Connected && p.ConnectedOutputPin.Owner == toRemove) p.ConnectedOutputPin = null;
+				}
+			}
+		}
+		
 		public IEnumerable<Node> GetNodes() {
 			foreach(Node n in nodes) yield return n;
 		}
