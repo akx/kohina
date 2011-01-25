@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -75,14 +76,30 @@ namespace Kohina {
 		}
 		
 		void UpdateNodeCatalogView() {
-			nodeCatalogList.Items.Clear();
+			
 			nodeCatalogList.BeginUpdate();
+			nodeCatalogList.Items.Clear();
+			nodeCatalogList.Groups.Clear();
+			Dictionary<string, List<ListViewItem>> byCategory = new Dictionary<string, List<ListViewItem>>();
 			foreach(Type t in NodeRegistry.Instance.Enumerate()) {
+				object[] attrs = t.GetCustomAttributes(typeof(NodeCategoryAttribute), true);
+				string category = "Other";
+				if(attrs.Length > 0) category = (attrs[0] as NodeCategoryAttribute).ToString();
+				if(!byCategory.ContainsKey(category)) byCategory[category] = new List<ListViewItem>();
 				ListViewItem lvi = new ListViewItem() {
 					Text = t.Name,
 					Tag = t
 				};
-				nodeCatalogList.Items.Add(lvi);
+				byCategory[category].Add(lvi);
+				
+			}
+			foreach(var kv in byCategory) {
+				ListViewGroup lvg = new ListViewGroup(kv.Key);
+				nodeCatalogList.Groups.Add(lvg);
+				foreach(var item in kv.Value) {
+					item.Group = lvg;
+					nodeCatalogList.Items.Add(item);
+				}
 			}
 			nodeCatalogList.EndUpdate();
 		}
@@ -139,6 +156,9 @@ namespace Kohina {
 		void ConnectionViewPanel1NodeSelected(object sender, NodeEventArgs e)
 		{
 			SelectNode(e.Node);
+			if(e.WasRightClick) {
+				nodeContextMenu.Show(connView, e.MouseArgs.Location);
+			}
 		}
 		
 		void XmlToCBButtonClick(object sender, EventArgs e)
@@ -157,6 +177,16 @@ namespace Kohina {
 		void PinPropGridPropertyValueChanged(object s, PropertyValueChangedEventArgs e)
 		{
 			connView.Refresh();
+		}
+		
+		void DeleteToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			Node n = connView.SelectedNode;
+			SelectNode(null);
+			w.RemoveNode(n);
+			n.Dispose();
+			connView.Refresh();
+			
 		}
 	}
 }

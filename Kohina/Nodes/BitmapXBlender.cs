@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 
 namespace Kohina.Nodes
 {
+	[NodeCategoryAttribute(DataType.Bitmap, NodeCategoryKind.Mixer)]
 	public class BitmapXBlender: Node
 	{
 		[PinAttribs("Input 1", PinDirection.Input, DataType.Bitmap)]
@@ -43,8 +44,8 @@ namespace Kohina.Nodes
 				Bitmap bmp1 = input1Pin.Read<Bitmap>(request);
 				Bitmap bmp2 = input2Pin.Read<Bitmap>(request);
 				if(bmp1 == null && bmp2 == null) return null;
-				if(bmp1 != null && bmp2 == null) return bmp1;
-				if(bmp1 == null && bmp2 != null) return bmp2;
+				if(bmp2 == null) return bmp1;
+				if(bmp1 == null) return bmp2;
 				Size sz = (request is BitmapPinRequest) ? (request as BitmapPinRequest).DesiredSize : new Size(
 					Math.Min(bmp1.Size.Width, bmp2.Size.Width),
 					Math.Min(bmp1.Size.Height, bmp2.Size.Height)

@@ -25,8 +25,13 @@ namespace Kohina
 	
 	public class NodeEventArgs: EventArgs {
 		public Node Node { get; set; }
-		public NodeEventArgs(Node n) {
+		public bool WasRightClick;
+		public MouseEventArgs MouseArgs;
+		
+		public NodeEventArgs(Node n, bool wasRightClick, MouseEventArgs mouseEventArgs) {
 			this.Node = n;
+			this.WasRightClick = wasRightClick;
+			this.MouseArgs = mouseEventArgs;
 		}
 	}
 	
@@ -142,7 +147,7 @@ namespace Kohina
 					Refresh();
 					return;
 				} else {
-					OnNodeSelected(new NodeEventArgs(nodeAtCur.Node));
+					OnNodeSelected(new NodeEventArgs(nodeAtCur.Node, (e.Button == MouseButtons.Right), e));
 				}
 			}
 			mbDown = true;

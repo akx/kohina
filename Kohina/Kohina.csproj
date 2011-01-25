@@ -10,15 +10,18 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Kohina</RootNamespace>
     <AssemblyName>Kohina</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <SourceAnalysisOverrideSettingsFile>C:\Users\X\AppData\Roaming\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>Full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -34,6 +37,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitmapFilters.cs" />
     <Compile Include="BitmapPinRequest.cs" />
     <Compile Include="Caches.cs" />
     <Compile Include="CBlend.cs" />
@@ -63,9 +75,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="NodeCategoryAttribute.cs" />
     <Compile Include="NodePropertyProxy.cs" />
     <Compile Include="NodeRegistry.cs" />
     <Compile Include="Nodes\BitmapBlender.cs" />
+    <Compile Include="Nodes\BitmapBlur.cs" />
+    <Compile Include="Nodes\BitmapCacher.cs" />
     <Compile Include="Nodes\BitmapChannelRemap.cs" />
     <Compile Include="Nodes\BitmapColorMixer.cs" />
     <Compile Include="Nodes\BitmapColorSpace.cs" />
@@ -75,6 +90,7 @@
     <Compile Include="Nodes\BitmapViewer.cs" />
     <Compile Include="Nodes\BitmapXBlender.cs" />
     <Compile Include="Nodes\ColorBlender.cs" />
+    <Compile Include="Nodes\GradientBitmap.cs" />
     <Compile Include="Nodes\SolidColorBitmap.cs" />
     <Compile Include="Nodes\TimeToLFO.cs" />
     <Compile Include="Pin.cs" />

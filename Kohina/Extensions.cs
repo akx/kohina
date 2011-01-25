@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Xml.Linq;
 
@@ -40,5 +41,6 @@ namespace Kohina
 			if((typeof(T)).IsSubclassOf(typeof(Enum))) return (T)Enum.Parse(typeof(T), attr.Value, true);
 			return converter(attr.Value);
 		}
+		
 	}
 }

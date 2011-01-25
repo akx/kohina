@@ -9,6 +9,8 @@ namespace Kohina.Nodes
 		RGBtoHSV = 0,
 		HSVtoRGB = 1
 	};
+	
+	[NodeCategoryAttribute(DataType.Bitmap, NodeCategoryKind.Modifier)]
 	public class BitmapColorSpace: Node
 	{
 		[PinAttribs("Input", PinDirection.Input, DataType.Bitmap)]

@@ -4,9 +4,7 @@ using System.Drawing;
 
 namespace Kohina.Nodes
 {
-	/// <summary>
-	/// Description of ColorBlender.
-	/// </summary>
+	[NodeCategoryAttribute(DataType.Color, NodeCategoryKind.Mixer)]
 	public class ColorBlender: Node
 	{
 		[PinAttribs("Color1", PinDirection.Input, DataType.Color)]

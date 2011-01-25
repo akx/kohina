@@ -23,11 +23,13 @@ namespace Kohina {
 			get { return guid; }
 		}
 		
+		[Category("Environment")]
 		public string Name {
 			get { return name; }
 			set { name = value; }
 		}
 		
+		[Category("Environment")]
 		public string Note {
 			get { return note; }
 			set { note = value; }

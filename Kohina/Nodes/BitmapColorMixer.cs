@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 
 namespace Kohina.Nodes
 {
+	[NodeCategoryAttribute(DataType.Bitmap, NodeCategoryKind.Modifier)]
 	public class BitmapColorMixer: Node
 	{
 		[PinAttribs("Input", PinDirection.Input, DataType.Bitmap)]

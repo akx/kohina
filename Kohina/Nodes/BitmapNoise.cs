@@ -6,9 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Kohina.Nodes
 {
-	/// <summary>
-	/// Description of BitmapNoise.
-	/// </summary>
+	[NodeCategoryAttribute(DataType.Bitmap, NodeCategoryKind.Generator)]
 	public class BitmapNoise: Node
 	{
 		[PinAttribs("Output", PinDirection.Output, DataType.Bitmap)]
