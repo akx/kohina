@@ -16,20 +16,30 @@ namespace Kohina.Nodes
 		Pin inputPin = null;
 		[PinAttribs("Output", PinDirection.Output, DataType.Bitmap)]
 		Pin outputPin = null;
-		[PinAttribs("Radius", PinDirection.Input, DataType.Number)]
-		Pin radiusPin = null;
+		[PinAttribs("Radius X", PinDirection.Input, DataType.Number)]
+		Pin radiusXPin = null;
+		[PinAttribs("Radius Y", PinDirection.Input, DataType.Number)]
+		Pin radiusYPin = null;
 		
-		bool boxBlur = true;
 		
-		public bool BoxBlur {
-			get { return boxBlur; }
-			set { boxBlur = value; }
+		public enum BlurAlgorithm {
+			BoxBlur,
+			SlowBlur,
+			StackBlur
 		}
+		
+		BlurAlgorithm algorithm = BlurAlgorithm.StackBlur;
+		
+		public BlurAlgorithm Algorithm {
+			get { return algorithm; }
+			set { algorithm = value; }
+		}
+		
 		
 		
 		protected override object GetPinDefaultConstantValue(Pin p)
 		{
-			if(p == radiusPin) return (object)3.0;
+			if(p == radiusXPin || p == radiusYPin) return (object)3.0;
 			return null;
 		}
 		
@@ -42,11 +52,17 @@ namespace Kohina.Nodes
 				bmp = bmp.ResizeIfNeeded(
 					(request is BitmapPinRequest) ? (request as BitmapPinRequest).DesiredSize : bmp.Size
 				);
-				double radius = radiusPin.Read<double>(request);
-				if(radius < 0) return bmp;
-				Bitmap blurred = BitmapFilters.Blur(bmp, (int)Math.Round(radius), boxBlur);
-				bmp.Dispose();
-				return blurred;
+				int radiusX = (int)Math.Round(radiusXPin.Read<double>(request));
+				int radiusY = (int)Math.Round(radiusYPin.Read<double>(request));
+				if(algorithm == BlurAlgorithm.StackBlur) {
+					BitmapFilters.StackBlur(bmp, radiusX, radiusY);
+					return bmp;
+				} else {
+					Bitmap blurred = BitmapFilters.Blur(bmp, radiusX, radiusY, algorithm == BlurAlgorithm.BoxBlur);
+					bmp.Dispose();
+					return blurred;
+				}
+				
 			}
 			return null;
 		}
