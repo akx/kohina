@@ -221,7 +221,13 @@ namespace Kohina
 			Refresh();
 		}
 		
-
+		private Pin CheckAutoConnectValidity() {
+			if(holdingPin == null || highlightNode == null || highlightNode == holdingPin.Owner) return null;
+			foreach(Pin p in highlightNode.AllPins) {
+				if(!p.Connected && p.Direction != holdingPin.Direction && p.DataType == holdingPin.DataType) return p;
+			}
+			return null;
+		}
 		
 		private void Render(Graphics g) {
 			if(world == null) {
@@ -286,7 +292,7 @@ namespace Kohina
 			}
 			if(holdingPin != null) {
 				CVPinInfo pi = pinInfos[holdingPin];
-				g.DrawLine(Pens.Wheat, pi.Location.X + 2, pi.Location.Y + 2, mousePos.X, mousePos.Y);
+				g.DrawLine(Pens.SlateBlue, pi.Location.X + 2, pi.Location.Y + 2, mousePos.X, mousePos.Y);
 			}
 			g.SmoothingMode = SmoothingMode.None;
 			foreach(CVNodeInfo cni in nodeInfos.Values) {
